@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mahaba Elementary School – The School of Hope</title>
-<link rel="icon" href="logo.jpg">
+<link rel="icon" href="images/logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -19,7 +19,7 @@ nav{position:sticky;top:0;z-index:9;background:var(--navy);display:flex;align-it
 nav img{height:42px;width:42px;border-radius:50%;margin-right:8px}
 nav a{color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:8px 12px;border-radius:99px;white-space:nowrap}
 nav a:hover{background:var(--green)}
-.hero{position:relative;min-height:92vh;display:grid;align-items:end;color:#fff;background:linear-gradient(180deg,rgba(14,26,115,.15) 0%,rgba(14,26,115,.85) 100%),url(school.jpg) center 45%/cover}
+.hero{position:relative;min-height:92vh;display:grid;align-items:end;color:#fff;background:linear-gradient(180deg,rgba(14,26,115,.15) 0%,rgba(14,26,115,.85) 100%),url(images/school.jpg) center 45%/cover}
 .hero div{max-width:1000px;padding:24px 24px 64px}
 .hero img{width:130px;height:130px;border-radius:50%;border:5px solid #fff;margin-bottom:16px}
 .hero h1{color:#fff;font-size:clamp(2.4rem,8vw,5.2rem);font-weight:800}
@@ -68,13 +68,13 @@ footer{background:var(--navy);color:#fff;text-align:center;padding:32px 20px}
 <body>
 
 <nav aria-label="Main">
-  <img src="logo.jpg" alt="MES logo">
+  <img src="images/logo.jpg" alt="MES logo">
   <a href="#home">Home</a><a href="#about">About Us</a><a href="#personnel">School Personnel</a><a href="#programs">Programs &amp; Projects</a><a href="#news">News &amp; Updates</a><a href="#gallery">Photo Gallery</a><a href="#reports">Reports &amp; Documents</a>
 </nav>
 
 <header class="hero" id="home">
   <div>
-    <img src="logo.jpg" alt="Mahaba Elementary School seal">
+    <img src="images/logo.jpg" alt="Mahaba Elementary School seal">
     <h1>Mahaba Elementary School</h1>
     <span class="tag">The School of Hope</span>
     <p>Maligayang pagdating! Welcome to our school in Corcuera, Romblon, where every learner is guided to read, grow, and dream.</p>
@@ -219,7 +219,7 @@ async function load(sheet){
   $("#newsList").innerHTML = news.map(n=>`<article class="card news"><time>${esc(String(n.Date).slice(0,10))}</time><h3>${esc(n.Title)}</h3><p>${esc(n.Body)}</p></article>`).join("") || '<p class="empty">No news yet.</p>';
 
   const gal = await load("Gallery");
-  $("#galList").innerHTML = gal.length ? gal.map(g=>`<figure><img loading="lazy" src="${esc(g.URL)}" alt="${esc(g.Caption)}"><figcaption>${esc(g.Caption)}</figcaption></figure>`).join("") : '<figure><img src="school.jpg" alt="Mahaba Elementary School campus"><figcaption>Our campus, December 2025</figcaption></figure>';
+  $("#galList").innerHTML = gal.length ? gal.map(g=>`<figure><img loading="lazy" src="${esc(g.URL)}" alt="${esc(g.Caption)}"><figcaption>${esc(g.Caption)}</figcaption></figure>`).join("") : '<figure><img src="images/school.jpg" alt="Mahaba Elementary School campus"><figcaption>Our campus, December 2025</figcaption></figure>';
 
   const docs = await load("Documents");
   $("#docList").innerHTML = docs.map(d=>`<a href="${esc(d.URL)}" target="_blank" rel="noopener">${esc(d.Title)}</a>`).join("");
