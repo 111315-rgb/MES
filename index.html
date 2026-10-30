@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mahaba Elementary School – The School of Hope</title>
+<link rel="icon" href="logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#1a2fd1;--navy:#0e1a73;--green:#2f9e3f;--mint:#bfeedd;--sun:#f7c948;--cream:#fffbea;--ink:#1c2340;--r:18px}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font:17px/1.65 'Nunito Sans',sans-serif;color:var(--ink);background:var(--cream)}
+h1,h2,h3{font-family:'Baloo 2',sans-serif;line-height:1.15;color:var(--navy)}
+a{color:var(--blue)}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+nav{position:sticky;top:0;z-index:9;background:var(--navy);display:flex;align-items:center;gap:6px;padding:8px 16px;overflow-x:auto}
+nav img{height:42px;width:42px;border-radius:50%;margin-right:8px}
+nav a{color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:8px 12px;border-radius:99px;white-space:nowrap}
+nav a:hover{background:var(--green)}
+.hero{position:relative;min-height:92vh;display:grid;align-items:end;color:#fff;background:linear-gradient(180deg,rgba(14,26,115,.15) 0%,rgba(14,26,115,.85) 100%),url(school.jpg) center 45%/cover}
+.hero div{max-width:1000px;padding:24px 24px 64px}
+.hero img{width:130px;height:130px;border-radius:50%;border:5px solid #fff;margin-bottom:16px}
+.hero h1{color:#fff;font-size:clamp(2.4rem,8vw,5.2rem);font-weight:800}
+.hero .tag{display:inline-block;background:var(--sun);color:var(--navy);font:800 clamp(1.3rem,4vw,2rem)/1 'Baloo 2';padding:10px 22px;border-radius:99px;margin:14px 0}
+.hero p{max-width:560px;font-size:1.1rem}
+.btn{display:inline-block;background:var(--green);color:#fff;font-weight:700;border:0;padding:12px 24px;border-radius:99px;text-decoration:none;cursor:pointer;font-size:1rem;font-family:inherit}
+.btn:hover{background:#237a30}
+.btn.alt{background:var(--sun);color:var(--navy)}
+section{padding:72px 20px}
+.wrap{max-width:1050px;margin:auto}
+section h2{font-size:clamp(1.9rem,5vw,2.8rem);margin-bottom:8px}
+.sub{margin-bottom:28px;max-width:60ch}
+.band{background:var(--mint)}
+.dark{background:var(--blue);color:#fff}.dark h2,.dark h3{color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.card{background:#fff;border-radius:var(--r);padding:22px;border-top:6px solid var(--green)}
+.card:nth-child(3n+2){border-color:var(--blue)}.card:nth-child(3n){border-color:var(--sun)}
+.card h3{font-size:1.3rem;margin-bottom:4px}
+.dark .card{color:var(--ink)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px}
+.stat{display:flex;gap:14px;flex-wrap:wrap;margin-top:24px}
+.stat span{background:#fff;border-radius:var(--r);padding:12px 18px;font-weight:700}
+.person{text-align:center}
+.person .av{width:84px;height:84px;border-radius:50%;margin:0 auto 10px;background:var(--mint);display:grid;place-items:center;font:800 1.8rem 'Baloo 2';color:var(--navy);overflow:hidden}
+.person .av img{width:100%;height:100%;object-fit:cover}
+.person small{color:#55608a}
+.head{background:var(--navy);color:#fff;border:0}.head h3{color:#fff}.head small{color:var(--mint)}.head .av{background:var(--sun)}
+.news time{font-size:.85rem;color:#55608a;font-weight:700}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.gal img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;background:var(--mint)}
+.gal figure{background:#fff;border-radius:14px;overflow:hidden}.gal figcaption{padding:8px 12px;font-size:.9rem}
+form{background:#fff;color:var(--ink);border-radius:var(--r);padding:26px;display:grid;gap:14px}
+label{font-weight:700;font-size:.95rem;display:grid;gap:4px}
+input,select{font:inherit;padding:11px 12px;border:2px solid #cfd6f5;border-radius:12px;width:100%}
+#msg{font-weight:700;min-height:1.5em}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;font-size:.95rem}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #e3e7fb}th{background:var(--mint);color:var(--navy)}
+.scroll{overflow-x:auto}
+.docs a{display:block;background:#fff;padding:14px 18px;border-radius:14px;margin-bottom:10px;font-weight:700;text-decoration:none}
+.docs a:hover{background:var(--sun)}
+footer{background:var(--navy);color:#fff;text-align:center;padding:32px 20px}
+.empty{color:#55608a;font-style:italic}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav aria-label="Main">
+  <img src="logo.jpg" alt="MES logo">
+  <a href="#home">Home</a><a href="#about">About Us</a><a href="#personnel">School Personnel</a><a href="#programs">Programs &amp; Projects</a><a href="#news">News &amp; Updates</a><a href="#gallery">Photo Gallery</a><a href="#reports">Reports &amp; Documents</a>
+</nav>
+
+<header class="hero" id="home">
+  <div>
+    <img src="logo.jpg" alt="Mahaba Elementary School seal">
+    <h1>Mahaba Elementary School</h1>
+    <span class="tag">The School of Hope</span>
+    <p>Maligayang pagdating! Welcome to our school in Corcuera, Romblon, where every learner is guided to read, grow, and dream.</p>
+    <p style="margin-top:20px"><a class="btn alt" href="#about">Get to know us</a> <a class="btn" href="#submit">Teacher report upload</a></p>
+  </div>
+</header>
+
+<section class="band" id="welcome">
+  <div class="wrap two">
+    <div>
+      <h2>Welcome to MES</h2>
+      <p>Itinatag noong 1945, ang Mahaba Elementary School ay patuloy na nagsisilbing tahanan ng pag-asa para sa mga batang mag-aaral ng Corcuera. Dito, ang bawat bata ay inaalagaan, tinuturuan, at hinuhubog upang maging mabuting mamamayan.</p>
+      <div class="stat"><span>Since 1945</span><span>57 learners</span><span>6 dedicated teachers</span><span>Corcuera, Romblon</span></div>
+    </div>
+    <div class="grid" id="highlights">
+      <div class="card"><h3>Reading first</h3><p>Every learner a reader.</p></div>
+      <div class="card"><h3>Safe campus</h3><p>Green, clean, and child-friendly.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <h2>About Us</h2>
+    <p class="sub">School profile, history, and what we stand for.</p>
+    <div class="two">
+      <div class="card"><h3>School Profile</h3><p>Mahaba Elementary School, Corcuera, Romblon. School ID: <b>111315</b>. District: <b>Corcuera</b>. Enrollment: <b>57</b> learners.</p></div>
+      <div class="card"><h3>Our History</h3><p>Founded in 1945. [Isulat dito ang kasaysayan ng paaralan: sino ang nagtatag, saan unang nagsimula, mga mahahalagang taon.]</p></div>
+      <div class="card"><h3>Vision</h3><p>We dream of Filipinos who passionately love their country and whose values and competencies enable them to realize their full potential and contribute meaningfully to building the nation.</p><p style="margin-top:10px">As a learner-centered public institution, the Department of Education continuously improves itself to better serve its stakeholders.</p></div>
+      <div class="card"><h3>Mission</h3><p>To protect and promote the right of every Filipino to quality, equitable, culture-based, and complete basic education where:</p><ul style="margin:10px 0 0 20px"><li>Students learn in a child-friendly, gender-sensitive, safe, and motivating environment.</li><li>Teachers facilitate learning and constantly nurture every learner.</li><li>Administrators and staff, as stewards of the institution, ensure an enabling and supportive environment for effective learning to happen.</li><li>Family, community, and other stakeholders are actively engaged and share responsibility for developing life-long learners.</li></ul></div>
+    </div>
+    <h3 style="margin:28px 0 12px">Core Values</h3>
+    <div class="grid">
+      <div class="card"><h3>Maka-Diyos</h3></div><div class="card"><h3>Makatao</h3></div><div class="card"><h3>Makakalikasan</h3></div><div class="card"><h3>Makabansa</h3></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="personnel">
+  <div class="wrap">
+    <h2>School Personnel</h2>
+    <p class="sub">The people who care for our learners every day.</p>
+    <div class="grid" id="people"></div>
+  </div>
+</section>
+
+<section id="programs">
+  <div class="wrap">
+    <h2>Programs and Projects</h2>
+    <p class="sub">Our initiatives for learning, safety, and community.</p>
+    <div class="grid">
+      <div class="card"><h3>Reading Program</h3><p>Daily reading activities, Phil-IRI, and Project Bagong Pagbasa for every learner.</p></div>
+      <div class="card"><h3>Numeracy Program</h3><p>Building number sense through games, drills, and hands-on problem solving.</p></div>
+      <div class="card"><h3>ARAL Program</h3><p>Academic Recovery and Accessible Learning sessions that help learners catch up.</p></div>
+      <div class="card"><h3>DRRM</h3><p>Drills, hazard mapping, and preparedness for typhoons, floods, and earthquakes.</p></div>
+      <div class="card"><h3>Gulayan sa Paaralan</h3><p>School garden and feeding support for healthy, happy learners.</p></div>
+      <div class="card"><h3>Brigada Eskwela</h3><p>Parents, teachers, and the community working together for a ready campus.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="news">
+  <div class="wrap">
+    <h2>News and Updates</h2>
+    <p class="sub">Activities, announcements, and achievements.</p>
+    <div class="grid" id="newsList"></div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <h2>Photo Gallery</h2>
+    <p class="sub">Moments from our school events.</p>
+    <div class="gal" id="galList"></div>
+  </div>
+</section>
+
+<section class="dark" id="reports">
+  <div class="wrap">
+    <h2>School Reports and Documents</h2>
+    <p class="sub">Public school documents, and a secure upload area for our teachers.</p>
+    <div class="docs" id="docList"></div>
+
+    <h3 id="submit" style="margin:40px 0 12px">Teacher report submission</h3>
+    <form id="up">
+      <label>Teacher <select id="teacher" required><option value="">Loading…</option></select></label>
+      <label>Your PIN <input id="pin" type="password" inputmode="numeric" autocomplete="off" required></label>
+      <label>Report type
+        <select id="type" required>
+          <option>Lesson Plan</option><option>Weekly Report</option><option>Monthly Report</option><option>Quarterly Report</option><option>Classroom Report</option><option>Other DepEd Report</option>
+        </select>
+      </label>
+      <label>File (PDF, Word, Excel, or PowerPoint, up to 15 MB)
+        <input id="file" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" required>
+      </label>
+      <button class="btn" id="send" type="submit">Upload report</button>
+      <div id="msg" role="status"></div>
+    </form>
+
+    <h3 style="margin:40px 0 12px">Recent submissions</h3>
+    <div class="scroll"><table><thead><tr><th>Date</th><th>Teacher</th><th>Type</th><th>File</th></tr></thead><tbody id="subs"><tr><td colspan="4" class="empty">No submissions yet.</td></tr></tbody></table></div>
+  </div>
+</section>
+
+<footer>
+  <p><b>Mahaba Elementary School</b> · The School of Hope</p>
+  <p>Corcuera, Romblon · Department of Education</p>
+</footer>
+
+<script>
+/* ====== STEP 1: paste your Google Apps Script Web App URL here ====== */
+const API = "";
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* Sample data shows until the Google Sheet is connected */
+const SAMPLE = {
+  Personnel:[
+    {Name:"[School Head Name]",Position:"School Head",Group:"Head"},
+    {Name:"[Teacher 1]",Position:"Teacher I",Group:"Teaching"},{Name:"[Teacher 2]",Position:"Teacher I",Group:"Teaching"},
+    {Name:"[Teacher 3]",Position:"Teacher I",Group:"Teaching"},{Name:"[Teacher 4]",Position:"Teacher I",Group:"Teaching"},
+    {Name:"[Teacher 5]",Position:"Teacher I",Group:"Teaching"},{Name:"[Teacher 6]",Position:"Teacher I",Group:"Teaching"}
+  ],
+  News:[{Date:"2025-12-10",Title:"Welcome to our new school website",Body:"Dito natin ibabahagi ang mga balita at tagumpay ng ating paaralan."}],
+  Gallery:[], Documents:[
+    {Title:"School Improvement Plan (SIP)",URL:"#"},{Title:"Annual Implementation Plan (AIP)",URL:"#"},{Title:"School Policies",URL:"#"}
+  ], Reports:[]
+};
+
+async function load(sheet){
+  if(!API) return SAMPLE[sheet] || [];
+  try{ const r = await fetch(API+"?sheet="+sheet); return await r.json(); }
+  catch(e){ return SAMPLE[sheet] || []; }
+}
+
+(async()=>{
+  const ppl = await load("Personnel");
+  $("#people").innerHTML = ppl.map(p=>`<div class="card person ${p.Group==='Head'?'head':''}"><div class="av">${p.Photo?`<img src="${esc(p.Photo)}" alt="">`:esc((p.Name||"?")[0])}</div><h3>${esc(p.Name)}</h3><small>${esc(p.Position)}${p.Group&&p.Group!=='Head'?' · '+esc(p.Group):''}</small></div>`).join("") || '<p class="empty">No personnel listed yet.</p>';
+
+  const news = (await load("News")).reverse();
+  $("#newsList").innerHTML = news.map(n=>`<article class="card news"><time>${esc(String(n.Date).slice(0,10))}</time><h3>${esc(n.Title)}</h3><p>${esc(n.Body)}</p></article>`).join("") || '<p class="empty">No news yet.</p>';
+
+  const gal = await load("Gallery");
+  $("#galList").innerHTML = gal.length ? gal.map(g=>`<figure><img loading="lazy" src="${esc(g.URL)}" alt="${esc(g.Caption)}"><figcaption>${esc(g.Caption)}</figcaption></figure>`).join("") : '<figure><img src="school.jpg" alt="Mahaba Elementary School campus"><figcaption>Our campus, December 2025</figcaption></figure>';
+
+  const docs = await load("Documents");
+  $("#docList").innerHTML = docs.map(d=>`<a href="${esc(d.URL)}" target="_blank" rel="noopener">${esc(d.Title)}</a>`).join("");
+
+  const subs = (await load("Reports")).reverse().slice(0,15);
+  if(subs.length) $("#subs").innerHTML = subs.map(s=>`<tr><td>${esc(String(s.Date).slice(0,10))}</td><td>${esc(s.Teacher)}</td><td>${esc(s.Type)}</td><td>${esc(s.FileName)}</td></tr>`).join("");
+
+  const names = API ? await load("Teachers") : [{Name:"[Teacher 1]"},{Name:"[Teacher 2]"},{Name:"[Teacher 3]"},{Name:"[Teacher 4]"},{Name:"[Teacher 5]"},{Name:"[Teacher 6]"}];
+  $("#teacher").innerHTML = '<option value="">Select your name</option>' + names.map(t=>`<option>${esc(t.Name)}</option>`).join("");
+})();
+
+$("#up").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const msg = $("#msg"), f = $("#file").files[0];
+  if(!API){ msg.textContent = "Connect the Google Apps Script URL first (see README)."; return; }
+  if(f.size > 15*1024*1024){ msg.textContent = "File is larger than 15 MB. Compress it and try again."; return; }
+  $("#send").disabled = true; msg.textContent = "Uploading…";
+  try{
+    const data = await new Promise((ok,no)=>{ const r=new FileReader(); r.onload=()=>ok(r.result.split(",")[1]); r.onerror=no; r.readAsDataURL(f); });
+    const res = await fetch(API,{method:"POST",body:JSON.stringify({teacher:$("#teacher").value,pin:$("#pin").value,type:$("#type").value,fileName:f.name,mime:f.type||"application/octet-stream",data})});
+    const j = await res.json();
+    msg.textContent = j.ok ? "Report uploaded. Salamat po!" : (j.error || "Upload failed.");
+    if(j.ok) e.target.reset();
+  }catch(err){ msg.textContent = "Upload failed. Check your internet and try again."; }
+  $("#send").disabled = false;
+});
+</script>
+</body>
+</html>
