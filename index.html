@@ -43,9 +43,9 @@ section h2{font-size:clamp(1.9rem,5vw,2.8rem);margin-bottom:8px}
 .stat{display:flex;gap:14px;flex-wrap:wrap;margin-top:24px}
 .stat span{background:#fff;border-radius:var(--r);padding:12px 18px;font-weight:700}
 .person{text-align:center}
-.person .av{width:84px;height:84px;border-radius:50%;margin:0 auto 10px;background:var(--mint);display:grid;place-items:center;font:800 1.8rem 'Baloo 2';color:var(--navy);overflow:hidden}
-.person .av img{width:100%;height:100%;object-fit:cover}
-.person small{color:#55608a}
+.person .av{width:120px;height:120px;border-radius:50%;margin:0 auto 10px;background:var(--mint);display:grid;place-items:center;font:800 1.8rem 'Baloo 2';color:var(--navy);overflow:hidden}
+.person .av img{width:100%;height:100%;object-fit:cover;object-position:center 20%}
+.person small{color:#55608a;font-weight:600}
 .head{background:var(--navy);color:#fff;border:0}.head h3{color:#fff}.head small{color:var(--mint)}.head .av{background:var(--sun)}
 .news time{font-size:.85rem;color:#55608a;font-weight:700}
 .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
@@ -194,10 +194,13 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;
 /* Sample data shows until the Google Sheet is connected */
 const SAMPLE = {
   Personnel:[
-    {Name:"[School Head Name]",Position:"School Head",Group:"Head"},
-    {Name:"[Teacher 1]",Position:"Teacher I",Group:"Teaching"},{Name:"[Teacher 2]",Position:"Teacher I",Group:"Teaching"},
-    {Name:"[Teacher 3]",Position:"Teacher I",Group:"Teaching"},{Name:"[Teacher 4]",Position:"Teacher I",Group:"Teaching"},
-    {Name:"[Teacher 5]",Position:"Teacher I",Group:"Teaching"},{Name:"[Teacher 6]",Position:"Teacher I",Group:"Teaching"}
+    {Name:"Flamar F. Mirasol Jr",Position:"Head Teacher I",Assignment:"School Head",Group:"Head",Photo:"images/head.jpg"},
+    {Name:"Elgin F. Fruelda",Position:"Teacher II",Assignment:"Kinder Teacher",Group:"Teaching",Photo:"images/kinder.jpg"},
+    {Name:"Mary Ann M. Fabella",Position:"Teacher II",Assignment:"Grade 1 & 2 Teacher",Group:"Teaching",Photo:"images/grade1-2.jpg"},
+    {Name:"Lucky Joy M. Morada",Position:"Teacher I",Assignment:"Grade 3 Teacher",Group:"Teaching",Photo:"images/grade3.jpg"},
+    {Name:"Jocelyn F. Fronda",Position:"Teacher I",Assignment:"Grade 4 Teacher",Group:"Teaching",Photo:"images/grade4.jpg"},
+    {Name:"Romasita F. Falejo",Position:"Teacher II",Assignment:"Grade 5 Teacher",Group:"Teaching",Photo:"images/grade5.jpg"},
+    {Name:"Roger M. Falqueza",Position:"Teacher I",Assignment:"Grade 6 Teacher",Group:"Teaching",Photo:"images/grade6.jpg"}
   ],
   News:[{Date:"2025-12-10",Title:"Welcome to our new school website",Body:"Dito natin ibabahagi ang mga balita at tagumpay ng ating paaralan."}],
   Gallery:[], Documents:[
@@ -213,7 +216,7 @@ async function load(sheet){
 
 (async()=>{
   const ppl = await load("Personnel");
-  $("#people").innerHTML = ppl.map(p=>`<div class="card person ${p.Group==='Head'?'head':''}"><div class="av">${p.Photo?`<img src="${esc(p.Photo)}" alt="">`:esc((p.Name||"?")[0])}</div><h3>${esc(p.Name)}</h3><small>${esc(p.Position)}${p.Group&&p.Group!=='Head'?' · '+esc(p.Group):''}</small></div>`).join("") || '<p class="empty">No personnel listed yet.</p>';
+  $("#people").innerHTML = ppl.map(p=>`<div class="card person ${p.Group==='Head'?'head':''}"><div class="av">${p.Photo?`<img src="${esc(p.Photo)}" alt="">`:esc((p.Name||"?")[0])}</div><h3>${esc(p.Name)}</h3><small>${esc(p.Position)}</small><br><small>${esc(p.Assignment)}</small></div>`).join("") || '<p class="empty">No personnel listed yet.</p>';
 
   const news = (await load("News")).reverse();
   $("#newsList").innerHTML = news.map(n=>`<article class="card news"><time>${esc(String(n.Date).slice(0,10))}</time><h3>${esc(n.Title)}</h3><p>${esc(n.Body)}</p></article>`).join("") || '<p class="empty">No news yet.</p>';
@@ -227,7 +230,7 @@ async function load(sheet){
   const subs = (await load("Reports")).reverse().slice(0,15);
   if(subs.length) $("#subs").innerHTML = subs.map(s=>`<tr><td>${esc(String(s.Date).slice(0,10))}</td><td>${esc(s.Teacher)}</td><td>${esc(s.Type)}</td><td>${esc(s.FileName)}</td></tr>`).join("");
 
-  const names = API ? await load("Teachers") : [{Name:"[Teacher 1]"},{Name:"[Teacher 2]"},{Name:"[Teacher 3]"},{Name:"[Teacher 4]"},{Name:"[Teacher 5]"},{Name:"[Teacher 6]"}];
+  const names = API ? await load("Teachers") : [{Name:"Elgin F. Fruelda"},{Name:"Mary Ann M. Fabella"},{Name:"Lucky Joy M. Morada"},{Name:"Jocelyn F. Fronda"},{Name:"Romasita F. Falejo"},{Name:"Roger M. Falqueza"}];
   $("#teacher").innerHTML = '<option value="">Select your name</option>' + names.map(t=>`<option>${esc(t.Name)}</option>`).join("");
 })();
 
