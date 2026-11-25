@@ -69,7 +69,7 @@ footer{background:var(--navy);color:#fff;text-align:center;padding:32px 20px}
 
 <nav aria-label="Main">
   <img src="images/logo.jpg" alt="MES logo">
-  <a href="#home">Home</a><a href="#about">About Us</a><a href="#personnel">School Personnel</a><a href="#programs">Programs &amp; Projects</a><a href="#news">News &amp; Updates</a><a href="#gallery">Photo Gallery</a><a href="#reports">Reports &amp; Documents</a>
+  <a href="#home">Home</a><a href="#about">About Us</a><a href="#personnel">School Personnel</a><a href="#programs">Programs &amp; Projects</a><a href="#news">News &amp; Updates</a><a href="#gallery">Photo Gallery</a><a href="#reports">Reports &amp; Documents</a><a href="#mps">MPS Analysis</a>
 </nav>
 
 <header class="hero" id="home">
@@ -164,9 +164,11 @@ footer{background:var(--navy);color:#fff;text-align:center;padding:32px 20px}
       <label>Your PIN <input id="pin" type="password" inputmode="numeric" autocomplete="off" required></label>
       <label>Report type
         <select id="type" required>
-          <option>Lesson Plan</option><option>Weekly Report</option><option>Monthly Report</option><option>Quarterly Report</option><option>Classroom Report</option><option>Other DepEd Report</option>
+          <option>Comprehensive Rapid Literacy Assessment (CRLA)</option><option>Rapid Mathematics Assessment (RMA)</option><option>Philippine Informal Reading Inventory (Phil-IRI)</option><option>Multi-Factored Assessment Tool (MFAT)</option><option>Early Childhood Development Checklist (ECDC)</option><option>Lesson Plan (ILAW Format)</option>
         </select>
       </label>
+      <label>School year <select id="usy" required></select></label>
+      <label>Grading period <select id="uq" required><option>Quarter 1</option><option>Quarter 2</option><option>Quarter 3</option><option>Quarter 4</option><option>Whole year</option></select></label>
       <label>File (PDF, Word, Excel, or PowerPoint, up to 15 MB)
         <input id="file" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" required>
       </label>
@@ -179,6 +181,40 @@ footer{background:var(--navy);color:#fff;text-align:center;padding:32px 20px}
   </div>
 </section>
 
+<section class="band" id="mps">
+  <div class="wrap">
+    <h2>Mean Percentage Score (MPS)</h2>
+    <p class="sub">Teachers encode MPS per grading period. The graph compares every quarter across school years, with an automatic analysis and interpretation.</p>
+    <div class="two">
+      <div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+          <label style="flex:1;min-width:140px">Grade <select id="fg"></select></label>
+          <label style="flex:1;min-width:140px">Subject <select id="fs"></select></label>
+        </div>
+        <div class="card" style="border-color:var(--blue)">
+          <div id="chart"></div><div id="legend" style="display:flex;gap:16px;flex-wrap:wrap;font-weight:700;font-size:.9rem"></div>
+        </div>
+        <div class="scroll" style="margin-top:14px"><table id="mtab"></table></div>
+      </div>
+      <div>
+        <div class="card" id="analysis" style="margin-bottom:18px"></div>
+        <form id="mf">
+          <h3>Encode MPS</h3>
+          <label>Teacher <select id="mt" required></select></label>
+          <label>Your PIN <input id="mpin" type="password" inputmode="numeric" autocomplete="off" required></label>
+          <label>School year <select id="msy" required></select></label>
+          <label>Grading period <select id="mq" required><option value="1">Quarter 1</option><option value="2">Quarter 2</option><option value="3">Quarter 3</option><option value="4">Quarter 4</option></select></label>
+          <label>Grade <select id="mg" required></select></label>
+          <label>Subject <select id="ms" required></select></label>
+          <label>MPS (0 to 100) <input id="mv" type="number" min="0" max="100" step="0.01" required></label>
+          <button class="btn" id="msend" type="submit">Save MPS</button>
+          <div id="mmsg" role="status" style="font-weight:700;min-height:1.5em"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <p><b>Mahaba Elementary School</b> · The School of Hope</p>
   <p>Corcuera, Romblon · Department of Education</p>
@@ -186,7 +222,7 @@ footer{background:var(--navy);color:#fff;text-align:center;padding:32px 20px}
 
 <script>
 /* ====== STEP 1: paste your Google Apps Script Web App URL here ====== */
-const API = "";
+const API = "https://script.google.com/macros/s/AKfycbyCZBOBOYJBh0XInAISrbQWan1bV5SMgdjf7HC5UECCNe3VXVYc1klYe1VCMx4zZ3Zv/exec";
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -232,6 +268,7 @@ async function load(sheet){
 
   const names = API ? await load("Teachers") : [{Name:"Elgin F. Fruelda"},{Name:"Mary Ann M. Fabella"},{Name:"Lucky Joy M. Morada"},{Name:"Jocelyn F. Fronda"},{Name:"Romasita F. Falejo"},{Name:"Roger M. Falqueza"}];
   $("#teacher").innerHTML = '<option value="">Select your name</option>' + names.map(t=>`<option>${esc(t.Name)}</option>`).join("");
+  $("#mt").innerHTML=$("#teacher").innerHTML; drawMPS();
 })();
 
 $("#up").addEventListener("submit", async e=>{
@@ -242,12 +279,69 @@ $("#up").addEventListener("submit", async e=>{
   $("#send").disabled = true; msg.textContent = "Uploading…";
   try{
     const data = await new Promise((ok,no)=>{ const r=new FileReader(); r.onload=()=>ok(r.result.split(",")[1]); r.onerror=no; r.readAsDataURL(f); });
-    const res = await fetch(API,{method:"POST",body:JSON.stringify({teacher:$("#teacher").value,pin:$("#pin").value,type:$("#type").value,fileName:f.name,mime:f.type||"application/octet-stream",data})});
+    const res = await fetch(API,{method:"POST",body:JSON.stringify({teacher:$("#teacher").value,pin:$("#pin").value,type:$("#type").value,schoolYear:$("#usy").value,period:$("#uq").value,fileName:f.name,mime:f.type||"application/octet-stream",data})});
     const j = await res.json();
     msg.textContent = j.ok ? "Report uploaded. Salamat po!" : (j.error || "Upload failed.");
     if(j.ok) e.target.reset();
   }catch(err){ msg.textContent = "Upload failed. Check your internet and try again."; }
   $("#send").disabled = false;
+});
+
+/* ====== MPS module ====== */
+const SYS=["2024-2025","2025-2026","2026-2027"],GR=["Kinder","Grade 1","Grade 2","Grade 3","Grade 4","Grade 5","Grade 6"],
+SUB=["Mother Tongue","Filipino","English","Mathematics","Science","Araling Panlipunan","EsP","MAPEH","EPP/TLE"],
+COL=["#1a2fd1","#2f9e3f","#e0a800"],TARGET=75;
+const opts=a=>a.map(x=>`<option>${esc(x)}</option>`).join("");
+$("#usy").innerHTML=$("#msy").innerHTML=opts(SYS);
+$("#mg").innerHTML=opts(GR.slice(1)); $("#ms").innerHTML=opts(SUB);
+$("#fg").innerHTML="<option>All grades</option>"+opts(GR); $("#fs").innerHTML="<option>All subjects</option>"+opts(SUB);
+SAMPLE.MPS=[];[[62,66,70,72],[68,71,74,77],[72,75]].forEach((v,i)=>v.forEach((m,q)=>SAMPLE.MPS.push({Teacher:"Sample",SchoolYear:SYS[i],Quarter:q+1,Grade:"Grade 4",Subject:"Mathematics",MPS:m})));
+let MP=[];
+const dsc=v=>v>=96?"Mastered":v>=86?"Closely Approximating Mastery":v>=66?"Moving Towards Mastery":v>=35?"Average":v>=15?"Low":v>=5?"Very Low":"Absolutely No Mastery";
+const avg=a=>a.reduce((x,y)=>x+y,0)/a.length, f1=v=>v.toFixed(2);
+
+async function drawMPS(reload=true){
+  if(reload) MP=await load("MPS");
+  const g=$("#fg").value,s=$("#fs").value,map={};
+  MP.filter(r=>(g.startsWith("All")||r.Grade===g)&&(s.startsWith("All")||r.Subject===s)).forEach(r=>{((map[r.SchoolYear]??={})[r.Quarter]??=[]).push(Number(r.MPS))});
+  const sys=SYS.filter(y=>map[y]); sys.forEach(y=>{for(const q in map[y]) map[y][q]=avg(map[y][q])});
+  if(!sys.length){$("#chart").innerHTML='<p class="empty">No MPS data yet for this selection.</p>';$("#legend").innerHTML=$("#mtab").innerHTML=$("#analysis").innerHTML="";return;}
+  const W=640,H=300,L=40,B=30,T=16,pw=W-L-10,ph=H-B-T,gw=pw/4,bw=Math.min(40,(gw-20)/sys.length),Y=v=>T+ph*(1-v/100);
+  let sv=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="MPS by grading period and school year" style="width:100%;height:auto">`;
+  [0,25,50,75,100].forEach(v=>sv+=`<line x1="${L}" x2="${W-10}" y1="${Y(v)}" y2="${Y(v)}" stroke="#e3e7fb"/><text x="${L-6}" y="${Y(v)+4}" font-size="11" text-anchor="end" fill="#55608a">${v}</text>`);
+  [1,2,3,4].forEach((q,i)=>{sv+=`<text x="${L+gw*i+gw/2}" y="${H-10}" font-size="12" font-weight="700" text-anchor="middle" fill="#1c2340">Quarter ${q}</text>`;
+    sys.forEach((y,j)=>{const v=map[y][q]; if(v==null) return; const x=L+gw*i+(gw-bw*sys.length)/2+bw*j;
+      sv+=`<rect x="${x}" y="${Y(v)}" width="${bw-3}" height="${ph*v/100}" rx="3" fill="${COL[SYS.indexOf(y)]}"/><text x="${x+(bw-3)/2}" y="${Y(v)-4}" font-size="10" font-weight="700" text-anchor="middle" fill="#1c2340">${v.toFixed(1)}</text>`})});
+  sv+=`<line x1="${L}" x2="${W-10}" y1="${Y(TARGET)}" y2="${Y(TARGET)}" stroke="#d1392b" stroke-dasharray="6 4" stroke-width="2"/><text x="${W-12}" y="${Y(TARGET)-4}" font-size="10" text-anchor="end" fill="#d1392b">Target ${TARGET}</text></svg>`;
+  $("#chart").innerHTML=sv;
+  $("#legend").innerHTML=sys.map(y=>`<span><span style="display:inline-block;width:12px;height:12px;background:${COL[SYS.indexOf(y)]};border-radius:3px"></span> SY ${y}</span>`).join("");
+  $("#mtab").innerHTML="<thead><tr><th>School year</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>Average</th></tr></thead><tbody>"+sys.map(y=>{const vs=[1,2,3,4].map(q=>map[y][q]);const a=vs.filter(v=>v!=null);return `<tr><td>${y}</td>${vs.map(v=>`<td>${v==null?"–":f1(v)}</td>`).join("")}<td><b>${f1(avg(a))}</b></td></tr>`}).join("")+"</tbody>";
+  analyze(map,sys);
+}
+
+function analyze(map,sys){
+  const ly=sys[sys.length-1],qs=Object.keys(map[ly]).map(Number).sort(),lq=qs[qs.length-1],v=map[ly][lq],out=[];
+  out.push(`<b>Current standing:</b> The latest MPS is <b>${f1(v)}</b> (SY ${ly}, Quarter ${lq}), described as <b>${dsc(v)}</b>. This is ${v>=TARGET?`${f1(v-TARGET)} points above`:`${f1(TARGET-v)} points below`} the ${TARGET}% target.`);
+  let pv,pl;
+  if(lq>1&&map[ly][lq-1]!=null){pv=map[ly][lq-1];pl=`Quarter ${lq-1}`}
+  else{const py=sys[sys.length-2];if(py&&map[py][4]!=null){pv=map[py][4];pl=`Quarter 4 of SY ${py}`}}
+  if(pv!=null){const d=v-pv;out.push(`<b>Quarter-to-quarter:</b> ${d>0?"Up":d<0?"Down":"No change"} ${d?f1(Math.abs(d))+" points ":""}from ${pl}.`)}
+  const py=sys[sys.length-2];
+  if(py&&map[py][lq]!=null){const d=v-map[py][lq];out.push(`<b>Year-on-year:</b> Compared with Quarter ${lq} of SY ${py}, learners are ${d>0?"up":d<0?"down":"unchanged"}${d?" by "+f1(Math.abs(d))+" points":""}.`)}
+  if(qs.length>1){const hi=qs.reduce((a,b)=>map[ly][a]>=map[ly][b]?a:b),lo=qs.reduce((a,b)=>map[ly][a]<=map[ly][b]?a:b);out.push(`<b>SY ${ly} range:</b> Highest in Quarter ${hi} (${f1(map[ly][hi])}), lowest in Quarter ${lo} (${f1(map[ly][lo])}).`)}
+  const below=qs.filter(q=>map[ly][q]<TARGET).length;out.push(`<b>Target check:</b> ${below?`${below} of ${qs.length} recorded quarters are below ${TARGET}%.`:`All recorded quarters meet the ${TARGET}% target.`}`);
+  out.push(`<b>Recommendation:</b> `+(v<66?"Learners need intervention. Do an item analysis to find least-mastered competencies, then give remedial and reteaching sessions and track progress weekly.":v<TARGET?"Learners are approaching the target. Reteach the least-mastered competencies and use peer tutoring and differentiated tasks.":v<86?"Target met. Sustain the strategies used and give enrichment to learners who are ready.":"Excellent mastery. Share successful practices with other teachers and give higher-order enrichment tasks."));
+  $("#analysis").innerHTML="<h3>Analysis and interpretation</h3>"+out.map(t=>`<p style="margin-top:8px">${t}</p>`).join("");
+}
+$("#fg").onchange=$("#fs").onchange=()=>drawMPS(false);
+$("#mf").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("#mmsg");
+  if(!API){m.textContent="Connect the Google Apps Script URL first (see README).";return}
+  $("#msend").disabled=true;m.textContent="Saving…";
+  try{const res=await fetch(API,{method:"POST",body:JSON.stringify({action:"mps",teacher:$("#mt").value,pin:$("#mpin").value,schoolYear:$("#msy").value,quarter:$("#mq").value,grade:$("#mg").value,subject:$("#ms").value,mps:$("#mv").value})});
+    const j=await res.json();m.textContent=j.ok?"MPS saved. Salamat po!":(j.error||"Save failed.");if(j.ok){$("#mv").value="";$("#mpin").value="";drawMPS()}}
+  catch(err){m.textContent="Save failed. Check your internet and try again."}
+  $("#msend").disabled=false;
 });
 </script>
 </body>
