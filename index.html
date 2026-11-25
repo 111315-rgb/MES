@@ -168,7 +168,7 @@ footer{background:var(--navy);color:#fff;text-align:center;padding:32px 20px}
         </select>
       </label>
       <label>School year <select id="usy" required></select></label>
-      <label>Grading period <select id="uq" required><option>Quarter 1</option><option>Quarter 2</option><option>Quarter 3</option><option>Quarter 4</option><option>Whole year</option></select></label>
+      <label>Grading period <select id="uq" required><option>Term 1</option><option>Term 2</option><option>Term 3</option><option>Whole year</option></select></label>
       <label>File (PDF, Word, Excel, or PowerPoint, up to 15 MB)
         <input id="file" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" required>
       </label>
@@ -184,7 +184,7 @@ footer{background:var(--navy);color:#fff;text-align:center;padding:32px 20px}
 <section class="band" id="mps">
   <div class="wrap">
     <h2>Mean Percentage Score (MPS)</h2>
-    <p class="sub">Teachers encode MPS per grading period. The graph compares every quarter across school years, with an automatic analysis and interpretation.</p>
+    <p class="sub">Teachers encode MPS per grading period. The graph compares every term across school years, with an automatic analysis and interpretation.</p>
     <div class="two">
       <div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">
@@ -203,7 +203,7 @@ footer{background:var(--navy);color:#fff;text-align:center;padding:32px 20px}
           <label>Teacher <select id="mt" required></select></label>
           <label>Your PIN <input id="mpin" type="password" inputmode="numeric" autocomplete="off" required></label>
           <label>School year <select id="msy" required></select></label>
-          <label>Grading period <select id="mq" required><option value="1">Quarter 1</option><option value="2">Quarter 2</option><option value="3">Quarter 3</option><option value="4">Quarter 4</option></select></label>
+          <label>Grading period <select id="mq" required><option value="1">Term 1</option><option value="2">Term 2</option><option value="3">Term 3</option></select></label>
           <label>Grade <select id="mg" required></select></label>
           <label>Subject <select id="ms" required></select></label>
           <label>MPS (0 to 100) <input id="mv" type="number" min="0" max="100" step="0.01" required></label>
@@ -289,7 +289,7 @@ $("#up").addEventListener("submit", async e=>{
 
 /* ====== MPS module ====== */
 const SYS=["2024-2025","2025-2026","2026-2027"],GR=["Kinder","Grade 1","Grade 2","Grade 3","Grade 4","Grade 5","Grade 6"],
-SUB=["Mother Tongue","Filipino","English","Mathematics","Science","Araling Panlipunan","EsP","MAPEH","EPP/TLE"],
+SUB=["Reading and Literacy","Language","Mother Tongue","Filipino","English","Mathematics","Science","Araling Panlipunan","EsP","MAPEH","EPP/TLE"],
 COL=["#1a2fd1","#2f9e3f","#e0a800"],TARGET=75;
 const opts=a=>a.map(x=>`<option>${esc(x)}</option>`).join("");
 $("#usy").innerHTML=$("#msy").innerHTML=opts(SYS);
@@ -306,30 +306,30 @@ async function drawMPS(reload=true){
   MP.filter(r=>(g.startsWith("All")||r.Grade===g)&&(s.startsWith("All")||r.Subject===s)).forEach(r=>{((map[r.SchoolYear]??={})[r.Quarter]??=[]).push(Number(r.MPS))});
   const sys=SYS.filter(y=>map[y]); sys.forEach(y=>{for(const q in map[y]) map[y][q]=avg(map[y][q])});
   if(!sys.length){$("#chart").innerHTML='<p class="empty">No MPS data yet for this selection.</p>';$("#legend").innerHTML=$("#mtab").innerHTML=$("#analysis").innerHTML="";return;}
-  const W=640,H=300,L=40,B=30,T=16,pw=W-L-10,ph=H-B-T,gw=pw/4,bw=Math.min(40,(gw-20)/sys.length),Y=v=>T+ph*(1-v/100);
+  const W=640,H=300,L=40,B=30,T=16,pw=W-L-10,ph=H-B-T,gw=pw/3,bw=Math.min(40,(gw-20)/sys.length),Y=v=>T+ph*(1-v/100);
   let sv=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="MPS by grading period and school year" style="width:100%;height:auto">`;
   [0,25,50,75,100].forEach(v=>sv+=`<line x1="${L}" x2="${W-10}" y1="${Y(v)}" y2="${Y(v)}" stroke="#e3e7fb"/><text x="${L-6}" y="${Y(v)+4}" font-size="11" text-anchor="end" fill="#55608a">${v}</text>`);
-  [1,2,3,4].forEach((q,i)=>{sv+=`<text x="${L+gw*i+gw/2}" y="${H-10}" font-size="12" font-weight="700" text-anchor="middle" fill="#1c2340">Quarter ${q}</text>`;
+  [1,2,3].forEach((q,i)=>{sv+=`<text x="${L+gw*i+gw/2}" y="${H-10}" font-size="12" font-weight="700" text-anchor="middle" fill="#1c2340">Term ${q}</text>`;
     sys.forEach((y,j)=>{const v=map[y][q]; if(v==null) return; const x=L+gw*i+(gw-bw*sys.length)/2+bw*j;
       sv+=`<rect x="${x}" y="${Y(v)}" width="${bw-3}" height="${ph*v/100}" rx="3" fill="${COL[SYS.indexOf(y)]}"/><text x="${x+(bw-3)/2}" y="${Y(v)-4}" font-size="10" font-weight="700" text-anchor="middle" fill="#1c2340">${v.toFixed(1)}</text>`})});
   sv+=`<line x1="${L}" x2="${W-10}" y1="${Y(TARGET)}" y2="${Y(TARGET)}" stroke="#d1392b" stroke-dasharray="6 4" stroke-width="2"/><text x="${W-12}" y="${Y(TARGET)-4}" font-size="10" text-anchor="end" fill="#d1392b">Target ${TARGET}</text></svg>`;
   $("#chart").innerHTML=sv;
   $("#legend").innerHTML=sys.map(y=>`<span><span style="display:inline-block;width:12px;height:12px;background:${COL[SYS.indexOf(y)]};border-radius:3px"></span> SY ${y}</span>`).join("");
-  $("#mtab").innerHTML="<thead><tr><th>School year</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>Average</th></tr></thead><tbody>"+sys.map(y=>{const vs=[1,2,3,4].map(q=>map[y][q]);const a=vs.filter(v=>v!=null);return `<tr><td>${y}</td>${vs.map(v=>`<td>${v==null?"–":f1(v)}</td>`).join("")}<td><b>${f1(avg(a))}</b></td></tr>`}).join("")+"</tbody>";
+  $("#mtab").innerHTML="<thead><tr><th>School year</th><th>T1</th><th>T2</th><th>T3</th><th>Average</th></tr></thead><tbody>"+sys.map(y=>{const vs=[1,2,3].map(q=>map[y][q]);const a=vs.filter(v=>v!=null);return `<tr><td>${y}</td>${vs.map(v=>`<td>${v==null?"–":f1(v)}</td>`).join("")}<td><b>${f1(avg(a))}</b></td></tr>`}).join("")+"</tbody>";
   analyze(map,sys);
 }
 
 function analyze(map,sys){
   const ly=sys[sys.length-1],qs=Object.keys(map[ly]).map(Number).sort(),lq=qs[qs.length-1],v=map[ly][lq],out=[];
-  out.push(`<b>Current standing:</b> The latest MPS is <b>${f1(v)}</b> (SY ${ly}, Quarter ${lq}), described as <b>${dsc(v)}</b>. This is ${v>=TARGET?`${f1(v-TARGET)} points above`:`${f1(TARGET-v)} points below`} the ${TARGET}% target.`);
+  out.push(`<b>Current standing:</b> The latest MPS is <b>${f1(v)}</b> (SY ${ly}, Term ${lq}), described as <b>${dsc(v)}</b>. This is ${v>=TARGET?`${f1(v-TARGET)} points above`:`${f1(TARGET-v)} points below`} the ${TARGET}% target.`);
   let pv,pl;
-  if(lq>1&&map[ly][lq-1]!=null){pv=map[ly][lq-1];pl=`Quarter ${lq-1}`}
-  else{const py=sys[sys.length-2];if(py&&map[py][4]!=null){pv=map[py][4];pl=`Quarter 4 of SY ${py}`}}
-  if(pv!=null){const d=v-pv;out.push(`<b>Quarter-to-quarter:</b> ${d>0?"Up":d<0?"Down":"No change"} ${d?f1(Math.abs(d))+" points ":""}from ${pl}.`)}
+  if(lq>1&&map[ly][lq-1]!=null){pv=map[ly][lq-1];pl=`Term ${lq-1}`}
+  else{const py=sys[sys.length-2];if(py&&map[py][3]!=null){pv=map[py][3];pl=`Term 3 of SY ${py}`}}
+  if(pv!=null){const d=v-pv;out.push(`<b>Term-to-term:</b> ${d>0?"Up":d<0?"Down":"No change"} ${d?f1(Math.abs(d))+" points ":""}from ${pl}.`)}
   const py=sys[sys.length-2];
-  if(py&&map[py][lq]!=null){const d=v-map[py][lq];out.push(`<b>Year-on-year:</b> Compared with Quarter ${lq} of SY ${py}, learners are ${d>0?"up":d<0?"down":"unchanged"}${d?" by "+f1(Math.abs(d))+" points":""}.`)}
-  if(qs.length>1){const hi=qs.reduce((a,b)=>map[ly][a]>=map[ly][b]?a:b),lo=qs.reduce((a,b)=>map[ly][a]<=map[ly][b]?a:b);out.push(`<b>SY ${ly} range:</b> Highest in Quarter ${hi} (${f1(map[ly][hi])}), lowest in Quarter ${lo} (${f1(map[ly][lo])}).`)}
-  const below=qs.filter(q=>map[ly][q]<TARGET).length;out.push(`<b>Target check:</b> ${below?`${below} of ${qs.length} recorded quarters are below ${TARGET}%.`:`All recorded quarters meet the ${TARGET}% target.`}`);
+  if(py&&map[py][lq]!=null){const d=v-map[py][lq];out.push(`<b>Year-on-year:</b> Compared with Term ${lq} of SY ${py}, learners are ${d>0?"up":d<0?"down":"unchanged"}${d?" by "+f1(Math.abs(d))+" points":""}.`)}
+  if(qs.length>1){const hi=qs.reduce((a,b)=>map[ly][a]>=map[ly][b]?a:b),lo=qs.reduce((a,b)=>map[ly][a]<=map[ly][b]?a:b);out.push(`<b>SY ${ly} range:</b> Highest in Term ${hi} (${f1(map[ly][hi])}), lowest in Term ${lo} (${f1(map[ly][lo])}).`)}
+  const below=qs.filter(q=>map[ly][q]<TARGET).length;out.push(`<b>Target check:</b> ${below?`${below} of ${qs.length} recorded terms are below ${TARGET}%.`:`All recorded terms meet the ${TARGET}% target.`}`);
   out.push(`<b>Recommendation:</b> `+(v<66?"Learners need intervention. Do an item analysis to find least-mastered competencies, then give remedial and reteaching sessions and track progress weekly.":v<TARGET?"Learners are approaching the target. Reteach the least-mastered competencies and use peer tutoring and differentiated tasks.":v<86?"Target met. Sustain the strategies used and give enrichment to learners who are ready.":"Excellent mastery. Share successful practices with other teachers and give higher-order enrichment tasks."));
   $("#analysis").innerHTML="<h3>Analysis and interpretation</h3>"+out.map(t=>`<p style="margin-top:8px">${t}</p>`).join("");
 }
